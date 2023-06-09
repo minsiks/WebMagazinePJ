@@ -47,7 +47,7 @@ public class TestController {
 		}
 		jo.add("follwer", ja);
 		
-		return jo.toString();
+		return jo.toString();//
 	}
 	
 	@GetMapping("/myBatisTest")
