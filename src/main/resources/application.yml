@@ -18,3 +18,5 @@ logging:
     org.springframework.boot: ERROR
 server:
   port: 8081
+mybatis:
+  type-aliases-package: com.aza.domain

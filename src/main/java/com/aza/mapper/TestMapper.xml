@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aza.dao.TestBoardMapper">
-    <select id="getBoardList" resultType="com.aza.domain.TestBoard">
+    <select id="getBoardList" resultType="TestBoard">
         select * from board
     </select>
 </mapper>
