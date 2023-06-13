@@ -3,6 +3,7 @@ package com.aza.controller;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,6 +16,7 @@ import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -53,6 +55,11 @@ public class TestController {
 	@GetMapping("/myBatisTest")
 	public List<TestBoard> getBoardTest(){
 		return testService.getAllBoard();
+	}
+	@GetMapping("/api/hello")
+	public String apihello() {
+		
+		return "hello,world";
 	}
 
 }
