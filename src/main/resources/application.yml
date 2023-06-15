@@ -3,11 +3,13 @@ spring:
     jdbc:
       initialize-schema: always
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: 111111
-    url: jdbc:mysql://localhost:3306/web_magazine?&serverTimezone=UTC&autoReconnect=true&allowMultiQueries=true&characterEncoding=UTF-8
     mapper-locations: classpath:com/aza/mapper/*.xml
+    hikari:
+      driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+      jdbc-url: jdbc:log4jdbc:mysql://localhost:3306/web_magazine?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
+      username: root
+      password: 111111
+      connection-test-query: SELECT NOW() FROM dual
   devtools:
     livereload:
       enabled: true
@@ -20,3 +22,5 @@ server:
   port: 8081
 mybatis:
   type-aliases-package: com.aza.domain
+  configuration:
+    map-underscore-to-camel-case: true

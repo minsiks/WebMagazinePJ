@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aza.dao.UserMapper">
+	<sql id="selectList">
+		SELECT USER_ID,
+        		USER_PWD,
+        		USER_NAME,
+        		USER_GENDER,
+        		USER_PHONE_NO,
+        		USER_BIRTH,
+        		USER_REGDATE,
+        		USER_EMAIL,
+        		USER_TYPE
+     		FROM M_USER
+	</sql>
+	
+    <select id="getUserList" resultType="User">
+        <include refid="selectList"></include>
+    </select>
+    <select id="getUser" resultType="User" parameterType="String">
+        <include refid="selectList"></include>
+        WHERE USER_ID = #{userId}
+    </select>
+    <insert id="insertAdminUser" parameterType="User">
+     	INSERT INTO M_USER	
+     	(user_id,user_pwd,user_name,user_gender,user_phone_no,user_birth,user_regdate,user_email,user_type,user_use,user_deldate)
+     	VALUES
+     	(#{userId},#{userPwd},#{userName},#{userGender},#{userPhoneNo},#{userBirth},now(),#{userEmail},2,true,null)
+     </insert>
+</mapper>
