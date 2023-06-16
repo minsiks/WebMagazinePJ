@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.aza.dao.UserMapper;
 import com.aza.domain.User;
+import com.aza.dto.UserDto;
 import com.aza.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -27,10 +28,10 @@ public class UserTest {
 	public void join() {
 		Calendar cal = Calendar.getInstance();
 		cal.set(1994, 02,22);
-		User user = new User("admin01", "1234","김씨", "남", "010-1111-1111", new Date(cal.getTimeInMillis()), new Date(), null, 2);
+		UserDto user = new UserDto("admin05", "1234","김씨", "남", "010-1111-1111", new Date(), null);
 		String regId =  userService.join(user);
 		
-		log.debug("######"+regId);
+		log.debug("::::::"+regId);
 	}
 	@Test
 	public void getUserList() {
@@ -42,6 +43,6 @@ public class UserTest {
 	@Test
 	public void getUser() {
 		User user = userService.findUser("admin01");
-		log.debug("######"+ user);
+		log.debug("::::::"+ user);
 	}
 }

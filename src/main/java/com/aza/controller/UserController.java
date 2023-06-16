@@ -2,6 +2,8 @@ package com.aza.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aza.domain.User;
+import com.aza.dto.UserDto;
 import com.aza.service.UserService;
 import com.google.gson.JsonObject;
 
@@ -32,13 +35,13 @@ public class UserController {
 	}
 	
 	@PostMapping("/user")
-	public String adminJoin(@RequestBody User user) {
+	public String adminJoin(@Valid @RequestBody UserDto userDto) {
 		
-		String duplicate = userService.validateDuplicateUser(user);
+		String duplicate = userService.validateDuplicateUser(userDto);
 		if(duplicate.equals("중복")) {
 			return duplicate;
 		}else {
-			return userService.join(user);
+			return userService.join(userDto);
 		}		
 	}
 	
