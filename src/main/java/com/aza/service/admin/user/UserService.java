@@ -10,6 +10,8 @@ import com.aza.dao.admin.user.UserMapper;
 import com.aza.domain.admin.user.User;
 import com.aza.dto.admin.user.UserDto;
 import com.aza.exception.ApiExceptionHandler;
+import com.aza.exception.ErrorCode;
+import com.aza.exception.LoginFailException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -43,7 +45,9 @@ public class UserService {
 		User user = new User();
 		UserDto dto = new UserDto();
 		user = userMapper.getUserByIdAndPwd(userDto.getUserId(),userDto.getUserPwd());
-		
+		if(user == null) {
+			throw new LoginFailException("login fail", ErrorCode.LOGIN_FAIL_EXCEPTION);
+		}
 		dto = UserDto.create(user);
 		
 		
