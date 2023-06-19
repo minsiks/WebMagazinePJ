@@ -29,7 +29,7 @@ public class UserController {
 	
 	private final UserService userService;
 	
-	@GetMapping("/user")
+	@PostMapping("/user")
 	public List<User> test1() {
 		
 		return userService.findUsers();

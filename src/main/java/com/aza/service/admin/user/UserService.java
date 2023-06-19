@@ -12,6 +12,8 @@ import com.aza.dto.admin.user.UserDto;
 import com.aza.exception.ApiExceptionHandler;
 import com.aza.exception.ErrorCode;
 import com.aza.exception.LoginFailException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,14 +22,17 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 
 	private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 	
 	public List<User> findUsers(){
 		return userMapper.getUserList();
 	}
 	public String adminJoin(UserDto userDto) {
-		User user = userDto.toDomain();
-		userMapper.insertAdminUser(user);
-		return user.getUserId();
+	    User user = userDto.toDomain(passwordEncoder);
+	    // 비밀번호 암호화
+	    user.setUserPwd(passwordEncoder.encode(userDto.getUserPwd()));
+	    userMapper.insertAdminUser(user);
+	    return user.getUserId();
 	}
 	public User findUser(String id) {
 		return userMapper.getAdminUser(id);

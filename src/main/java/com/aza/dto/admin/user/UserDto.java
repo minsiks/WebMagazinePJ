@@ -6,12 +6,15 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import com.aza.domain.admin.user.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @Getter
@@ -19,6 +22,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Builder
+@Setter
 public class UserDto {
 	
 	@NotBlank(message = "아이디는 필수 입력값입니다.")
@@ -37,7 +41,8 @@ public class UserDto {
 	@NotBlank(message = "이메일은 필수 입력값입니다.")
 	private String userEmail;
 	
-	public User toDomain() {
+	public User toDomain(PasswordEncoder passwordEncoder) {
+		String encryptedPassword = passwordEncoder.encode(userPwd);
 		return User.builder()
 				.userId(userId)
 				.userPwd(userPwd)
