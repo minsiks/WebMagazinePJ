@@ -1,4 +1,4 @@
-package com.aza.domain;
+package com.aza.domain.admin.user;
 
 import java.util.Date;
 

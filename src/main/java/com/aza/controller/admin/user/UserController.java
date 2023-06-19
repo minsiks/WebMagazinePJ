@@ -1,4 +1,4 @@
-package com.aza.controller;
+package com.aza.controller.admin.user;
 
 import java.util.List;
 
@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.aza.domain.User;
-import com.aza.dto.UserDto;
-import com.aza.service.UserService;
+import com.aza.domain.admin.user.User;
+import com.aza.dto.admin.user.UserDto;
+import com.aza.exception.ApiExceptionHandler;
+import com.aza.service.admin.user.UserService;
 import com.google.gson.JsonObject;
 
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("user")
+@RequestMapping("admin")
 public class UserController {
 	
 	private final UserService userService;
@@ -34,15 +35,21 @@ public class UserController {
 		return userService.findUsers();
 	}
 	
-	@PostMapping("/user")
+	@PostMapping("/signUp")
 	public String adminJoin(@Valid @RequestBody UserDto userDto) {
 		
-		String duplicate = userService.validateDuplicateUser(userDto);
+		String duplicate = userService.validateDuplicateAdminUser(userDto);
 		if(duplicate.equals("중복")) {
 			return duplicate;
 		}else {
-			return userService.join(userDto);
+			return userService.adminJoin(userDto);
 		}		
+	}
+	@PostMapping("/signIn")
+	public Object adminLogin(@RequestBody UserDto userDto) {
+		UserDto dto = userService.adminLogin(userDto);
+		log.debug("dto ::=>{}"+dto);
+		return dto;
 	}
 	
 

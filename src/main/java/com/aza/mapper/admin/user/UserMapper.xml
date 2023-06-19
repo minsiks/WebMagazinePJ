@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.aza.dao.UserMapper">
+<mapper namespace="com.aza.dao.admin.user.UserMapper">
 	<sql id="selectList">
 		SELECT USER_ID,
         		USER_PWD,
@@ -19,9 +19,10 @@
     <select id="getUserList" resultType="User">
         <include refid="selectList"></include>
     </select>
-    <select id="getUser" resultType="User" parameterType="String">
+    <select id="getAdminUser" resultType="User" parameterType="String">
         <include refid="selectList"></include>
         WHERE USER_ID = #{userId}
+        AND USER_TYPE = 2
     </select>
     <insert id="insertAdminUser" parameterType="User">
      	INSERT INTO M_USER	
@@ -29,4 +30,11 @@
      	VALUES
      	(#{userId},#{userPwd},#{userName},#{userGender},#{userPhoneNo},#{userBirth},now(),#{userEmail},2,true,null)
      </insert>
+     <select id="getUserByIdAndPwd" resultType="User" parameterType="User">
+        <include refid="selectList"></include>
+        WHERE user_id=#{userId}
+		     AND user_pwd=#{userPwd}
+		     AND user_use=TRUE
+		     AND user_type=2
+    </select>
 </mapper>
