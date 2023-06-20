@@ -26,5 +26,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	         .csrf().disable()
          	.headers().frameOptions().disable();
 	   }
-	  깃허브 테스트 
+	  
 }
