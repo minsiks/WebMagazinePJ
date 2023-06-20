@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfig implements WebMvcConfigurer {
    @Override
    public void addCorsMappings(CorsRegistry registry) {
-      registry.addMapping("/user/**") // 요청 처리하려는 경로를 명시적으로 지정
+      registry.addMapping("/**") // 요청 처리하려는 경로를 명시적으로 지정
             .allowedOrigins("http://localhost:3000") // 허용할 출처를 명시적으로 지정
             .allowedMethods("GET", "POST", "PUT", "DELETE") // 허용할 HTTP 메서드 지정
             .allowedHeaders("*") // 허용할 헤더 지정

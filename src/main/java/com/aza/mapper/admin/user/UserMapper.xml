@@ -19,9 +19,10 @@
     <select id="getUserList" resultType="User">
         <include refid="selectList"></include>
     </select>
-    <select id="getAdminUser" resultType="User" parameterType="String">
+    <select id="getAdminUserById" resultType="User" parameterType="String">
         <include refid="selectList"></include>
         WHERE USER_ID = #{userId}
+        AND user_use=TRUE
         AND USER_TYPE = 2
     </select>
     <insert id="insertAdminUser" parameterType="User">
@@ -30,11 +31,5 @@
      	VALUES
      	(#{userId},#{userPwd},#{userName},#{userGender},#{userPhoneNo},#{userBirth},now(),#{userEmail},2,true,null)
      </insert>
-     <select id="getUserByIdAndPwd" resultType="User" parameterType="User">
-        <include refid="selectList"></include>
-        WHERE user_id=#{userId}
-		     AND user_pwd=#{userPwd}
-		     AND user_use=TRUE
-		     AND user_type=2
-    </select>
+     
 </mapper>

@@ -6,10 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
-@Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,6 +27,9 @@ public class User {
 	private boolean userUse;
 	private Date userDeldate;
 	
+	// 로그인 시도 횟수 제한
+	private boolean blocked;
+	private int failCount;
 	
 	
 }

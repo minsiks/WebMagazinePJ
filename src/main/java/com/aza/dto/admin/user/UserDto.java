@@ -14,7 +14,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
 @Getter
@@ -22,7 +21,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Builder
-@Setter
 public class UserDto {
 	
 	@NotBlank(message = "아이디는 필수 입력값입니다.")
@@ -45,7 +43,7 @@ public class UserDto {
 		String encryptedPassword = passwordEncoder.encode(userPwd);
 		return User.builder()
 				.userId(userId)
-				.userPwd(userPwd)
+				.userPwd(encryptedPassword)
 				.userName(userName)
 				.userGender(userGender)
 				.userPhoneNo(userPhoneNo)

@@ -14,6 +14,5 @@ public interface UserMapper {
 
 	public List<User> getUserList();
 	public void insertAdminUser(User user);
-	public User getAdminUser(String id);
-	public User getUserByIdAndPwd(@Param("userId") String userId, @Param("userPwd") String userPwd);
+	public User getAdminUserById(String id);
 }

@@ -30,16 +30,19 @@ public class UserService {
 	public String adminJoin(UserDto userDto) {
 	    User user = userDto.toDomain(passwordEncoder);
 	    // 비밀번호 암호화
-	    user.setUserPwd(passwordEncoder.encode(userDto.getUserPwd()));
 	    userMapper.insertAdminUser(user);
 	    return user.getUserId();
 	}
 	public User findUser(String id) {
-		return userMapper.getAdminUser(id);
+		return userMapper.getAdminUserById(id);
 	}
+	/**
+	 * 중복 관리자 회원 조회
+	 * @param userDto
+	 * @return
+	 */
 	public String validateDuplicateAdminUser(UserDto userDto) {
-		User findUser = userMapper.getAdminUser(userDto.getUserId());
-		
+		User findUser = userMapper.getAdminUserById(userDto.getUserId());
 		if(findUser==null) {
 			return "통과";
 		}else {
@@ -49,9 +52,12 @@ public class UserService {
 	public UserDto adminLogin(UserDto userDto) {
 		User user = new User();
 		UserDto dto = new UserDto();
-		user = userMapper.getUserByIdAndPwd(userDto.getUserId(),userDto.getUserPwd());
-		if(user == null) {
-			throw new LoginFailException("login fail", ErrorCode.LOGIN_FAIL_EXCEPTION);
+		user = userMapper.getAdminUserById(userDto.getUserId());
+		if(user==null) {
+			throw new LoginFailException("Id does not exist", ErrorCode.ID_DOES_NOT_EXIST);
+		}
+		else if(!passwordEncoder.matches(userDto.getUserPwd(), user.getUserPwd())) { // 암호화된 비밀번호 일치 조회
+			throw new LoginFailException("Incorrected password", ErrorCode.INCORRECTED_PASSWORD);
 		}
 		dto = UserDto.create(user);
 		

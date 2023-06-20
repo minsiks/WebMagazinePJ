@@ -14,7 +14,7 @@ DROP TABLE IF EXISTS mycoupon;
 
 CREATE TABLE `m_user` (
 	`user_id`	VARCHAR(50)	NOT NULL,
-	`user_pwd`	VARCHAR(100)	NULL,
+	`user_pwd`	VARCHAR(2000)	NULL,
 	`user_name`	VARCHAR(50)	NULL,
 	`user_gender`	VARCHAR(20)	NULL,
 	`user_phone_no`	VARCHAR(100)	NULL,
