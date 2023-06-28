@@ -31,5 +31,9 @@
      	VALUES
      	(#{userId},#{userPwd},#{userName},#{userGender},#{userPhoneNo},#{userBirth},now(),#{userEmail},2,true,null)
      </insert>
-     
+     <select id="getUserById" resultType="User" parameterType="String">
+        <include refid="selectList"></include>
+        WHERE USER_ID = #{userId}
+        AND user_use=TRUE
+    </select>
 </mapper>

@@ -24,3 +24,9 @@ mybatis:
   type-aliases-package: com.aza.domain
   configuration:
     map-underscore-to-camel-case: true
+    
+jwt:
+  secret: wMgz42
+  expiration-time : 60000*10
+  token-prefix : Bearer 
+  header-string : Authorization

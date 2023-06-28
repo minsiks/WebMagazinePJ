@@ -15,4 +15,5 @@ public interface UserMapper {
 	public List<User> getUserList();
 	public void insertAdminUser(User user);
 	public User getAdminUserById(String id);
+	public User getUserById(String id);
 }
