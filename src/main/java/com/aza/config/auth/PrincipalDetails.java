@@ -8,6 +8,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.aza.domain.admin.user.User;
+import com.aza.exception.ErrorCode;
+import com.aza.exception.LoginFailException;
 
 import lombok.Data;
 
@@ -30,7 +32,10 @@ public class PrincipalDetails implements UserDetails{
 	
 	@Override
 	public String getPassword() {
-		return user.getUserPwd();
+		if(user==null) {
+			throw new LoginFailException("아이디가 존재하지 않습니다.", ErrorCode.ID_DOES_NOT_EXIST);
+		}
+		return user.getUserPwd();			
 	}
 
 	@Override

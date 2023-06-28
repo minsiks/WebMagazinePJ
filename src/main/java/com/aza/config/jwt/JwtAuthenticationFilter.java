@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.auth0.jwt.JWT;
@@ -21,19 +22,22 @@ import com.aza.domain.admin.user.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 // 스프링 시큐리티에서 UsernamePasswordAuthenticationFilter 가 있음
 // login 요청해서 username, password 전송하면 (post)
 // UsernamePasswordAuthenticationFilter 동작을 함
-
+@Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter{
 
+	private final PasswordEncoder passwordEncoder;
 	private final AuthenticationManager authenticationManager;
 	
 	
-	public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
+	public JwtAuthenticationFilter(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder) {
+		this.passwordEncoder = passwordEncoder;
 		this.authenticationManager = authenticationManager;
-		setFilterProcessesUrl("/api/admin/login");
+		setFilterProcessesUrl("/api/admin/signIn");
 	}
 	// /login 요청을 하면 로그인 시도를 위해서 실행되는 함수
 	@Override
@@ -43,25 +47,21 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		
 		// 1. username, password 받아서
 		try {
-//			BufferedReader br = request.getReader();
-//			
-//			String input = null;
-//			while ((input=br.readLine())!=null) {
-//				System.out.println(input);
-//			}
+
 			ObjectMapper om = new ObjectMapper();
 			User user = om.readValue(request.getInputStream(), User.class);
-			System.out.println(user);
-			
+			log.debug("{}=>"+user);
+			String encryptedPassword = passwordEncoder.encode(user.getUserPwd());
+			log.debug("{}=>"+encryptedPassword);
 			UsernamePasswordAuthenticationToken authenticationToken =
 					new UsernamePasswordAuthenticationToken(user.getUserId(), user.getUserPwd());
 			
-			System.out.println("====================================================");
 			// PrincipalDetailsService의 loadUserByUsername() 함수가 실행
 			Authentication authentication =
 					authenticationManager.authenticate(authenticationToken);
+			log.debug("{}=>"+"====================================================");
 			PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-			System.out.println("로그인 완료됨" + principalDetails.getUser().getUserId()); // 로그인 완료
+			log.debug("{}=>로그인 완료됨" + principalDetails.getUser().getUserId()); // 로그인 완료
 			
 			// authentication 객체가 session영역에 저장을 행햐하고 그 방법이 return 해주면 됨
 			// 리턴의 이유는 권한 관리를 security가 대신 해주기 때문에 편하려고
@@ -79,7 +79,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			Authentication authResult) throws IOException, ServletException {
 		System.out.println("successfulAuthentication 실행됨 : 인증이 완료됨");
 		PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
-		
+		log.debug("{}->!!!!!!!!!!!!"+principalDetails);
 		// RSA방식 X Hash암호 방식
 		String jwtToken = JWT.create()
 				.withSubject("userToken") // 토큰 이름
@@ -88,6 +88,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 				.sign(Algorithm.HMAC512(JwtProperties.SECRET)); // 내 서버만 아는 고유한 값
 		
 		response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX+jwtToken);
+		
 	}
 	
 }

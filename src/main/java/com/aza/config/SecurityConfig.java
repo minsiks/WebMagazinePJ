@@ -6,6 +6,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -43,18 +44,23 @@ public class SecurityConfig { // extends WebSecurityConfigurerAdapter 22년 2월
 				.antMatchers("/api/user/**")
 				.access("hasRole('1') or hasRole('2')")
 				.antMatchers("/api/admin/**")
-				.access("hasRole('2')")
+				.hasRole("2")
 				.anyRequest().permitAll()
 				.and().build();
+	}
+	@Bean
+	GrantedAuthorityDefaults grantedAuthorityDefaults() {
+	    return new GrantedAuthorityDefaults(""); // Remove the ROLE_ prefix
 	}
 	
 	public class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurity> {
 		@Override
 		public void configure(HttpSecurity http) throws Exception {
 			AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
+			PasswordEncoder passwordEncoder = getPasswordEncoder();
 			http
 					.addFilter(corsConfig.corsFilter())
-					.addFilter(new JwtAuthenticationFilter(authenticationManager))
+					.addFilter(new JwtAuthenticationFilter(authenticationManager, passwordEncoder))
 					.addFilter(new JwtAuthorizationFilter(authenticationManager, userMapper));
 		}
 	}
