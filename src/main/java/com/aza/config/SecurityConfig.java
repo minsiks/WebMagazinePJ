@@ -15,6 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import com.aza.config.jwt.JwtAuthenticationFilter;
 import com.aza.config.jwt.JwtAuthorizationFilter;
 import com.aza.dao.admin.user.UserMapper;
+import com.aza.handler.CustomAuthFailureHandler;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,7 +26,6 @@ public class SecurityConfig { // extends WebSecurityConfigurerAdapter 22년 2월
 
 	private final CorsConfig corsConfig;
 	private final UserMapper userMapper;
-	
 	@Bean
 	public PasswordEncoder getPasswordEncoder() {
 		  return new BCryptPasswordEncoder();
@@ -53,17 +53,25 @@ public class SecurityConfig { // extends WebSecurityConfigurerAdapter 22년 2월
 	    return new GrantedAuthorityDefaults(""); // Remove the ROLE_ prefix
 	}
 	
+	
+	
 	public class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurity> {
 		@Override
 		public void configure(HttpSecurity http) throws Exception {
 			AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
 			PasswordEncoder passwordEncoder = getPasswordEncoder();
+
+			// Add the authentication failure handler to the JwtAuthenticationFilter
+		    JwtAuthenticationFilter authenticationFilter = new JwtAuthenticationFilter(authenticationManager, passwordEncoder,userMapper);
+		    authenticationFilter.setAuthenticationFailureHandler(new CustomAuthFailureHandler());
 			http
 					.addFilter(corsConfig.corsFilter())
-					.addFilter(new JwtAuthenticationFilter(authenticationManager, passwordEncoder))
+					.addFilter(authenticationFilter)
 					.addFilter(new JwtAuthorizationFilter(authenticationManager, userMapper));
 		}
 	}
+	
+	
 	 
 	  
 }

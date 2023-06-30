@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,12 +42,15 @@ public class UserController {
 			return userService.adminJoin(userDto);
 		}		
 	}
-	@PostMapping("/signIn")
-	public Object adminLogin(@RequestBody UserDto userDto) {
-		UserDto dto = userService.adminLogin(userDto);
-		log.debug("dto ::=>{}"+dto);
-		return dto;
-	}
+	// Spring Security에서 처리하기 때문에 직접 컨트롤러에서 처리 X 
+	// 로그인 관련 처리는 /config/jwt에 구성
+//	@PostMapping("/signIn")
+//	public ResponseEntity<UserDto> adminLogin(@RequestBody UserDto userDto) {
+//		log.debug("@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+//		UserDto dto = userService.adminLogin(userDto);
+//		log.debug("dto ::=>{}"+dto);
+//		return ResponseEntity.ok(dto);
+//	}
 	
 
 }
