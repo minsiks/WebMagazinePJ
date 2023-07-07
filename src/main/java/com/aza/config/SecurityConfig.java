@@ -41,6 +41,8 @@ public class SecurityConfig { // extends WebSecurityConfigurerAdapter 22년 2월
 				.apply(new MyCustomDsl()) // 커스텀 필터 등록
 				.and()
 				.authorizeRequests()
+				.antMatchers("/api/admin/signUp").permitAll()
+				.antMatchers("/api/auth/**").permitAll()
 				.antMatchers("/api/user/**")
 				.access("hasRole('1') or hasRole('2')")
 				.antMatchers("/api/admin/**")

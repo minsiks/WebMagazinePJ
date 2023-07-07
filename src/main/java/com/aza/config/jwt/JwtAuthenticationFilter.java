@@ -92,11 +92,19 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 				.withClaim("username", principalDetails.getUser().getUserId())
 				.sign(Algorithm.HMAC512(JwtProperties.SECRET)); // 내 서버만 아는 고유한 값
 		
+		String refreshToken = JWT.create()
+				.withSubject("refreshToken") // 토큰 이름
+				.withExpiresAt(new Date(System.currentTimeMillis()+(JwtProperties.REFRESH_EXPIRATION_TIME))) // 토큰 만료시간
+				.sign(Algorithm.HMAC512(JwtProperties.SECRET)); // 내 서버만 아는 고유한 값
+		
 		User user = userMapper.getAdminUserById(principalDetails.getUser().getUserId());
 		UserDto dto = UserDto.create(user);
 		
+		userMapper.updateRefreshToken(dto.getUserId(), refreshToken);
+		
 		response.setStatus(HttpServletResponse.SC_OK);
 		response.setHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX+jwtToken);
+		response.setHeader("Refreshtoken", JwtProperties.TOKEN_PREFIX+refreshToken);
 		String result = objectMapper.writeValueAsString(dto);
 		log.debug("{}->!!!!!!!!!!!!"+result);
 		response.getWriter().write(result);

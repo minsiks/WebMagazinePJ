@@ -23,7 +23,8 @@ CREATE TABLE `m_user` (
 	`user_email`	VARCHAR(100)	NULL,
 	`user_type`	INT	NULL,
 	`user_use`	BOOLEAN	NULL,
-	`user_deldate`	DATE	NULL
+	`user_deldate`	DATE	NULL,
+    `user_refresh_token` VARCHAR(2000)	NULL
 );
 ALTER TABLE `m_user` ADD CONSTRAINT `PK_USER` PRIMARY KEY (`user_id`);
 
