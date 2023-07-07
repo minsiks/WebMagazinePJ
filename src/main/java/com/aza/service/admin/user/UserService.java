@@ -49,19 +49,5 @@ public class UserService {
 			return "중복";
 		}
 	}
-	public UserDto adminLogin(UserDto userDto) {
-		User user = new User();
-		UserDto dto = new UserDto();
-		user = userMapper.getAdminUserById(userDto.getUserId());
-		if(user==null) {
-			throw new LoginFailException("Id does not exist", ErrorCode.ID_DOES_NOT_EXIST);
-		}
-		else if(!passwordEncoder.matches(userDto.getUserPwd(), user.getUserPwd())) { // 암호화된 비밀번호 일치 조회
-			throw new LoginFailException("Incorrected password", ErrorCode.INCORRECTED_PASSWORD);
-		}
-		dto = UserDto.create(user);
-		
-		
-		return dto;
-	}
+
 }

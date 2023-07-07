@@ -9,7 +9,8 @@ package com.aza.config.jwt;
 public interface JwtProperties {
 
 	String SECRET = "wMGZ42"; // 우리 서버만 알고 있는 비밀 값
-	int EXPIRATION_TIME = 60000*10; // 10분
+	int EXPIRATION_TIME = 60000*30; // 30분
+	int REFRESH_EXPIRATION_TIME = 604800000;   //7일
 	String TOKEN_PREFIX = "Bearer ";
 	String HEADER_STRING = "Authorization";
 }

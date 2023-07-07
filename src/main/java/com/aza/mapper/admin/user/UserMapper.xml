@@ -36,4 +36,12 @@
         WHERE USER_ID = #{userId}
         AND user_use=TRUE
     </select>
+    <insert id="updateRefreshToken">
+     	UPDATE M_USER SET USER_REFRESH_TOKEN = #{userRefreshToken} WHERE USER_ID = #{userId}
+     </insert>
+     <select id="getUserByRefreshToken" resultType="User" parameterType="String">
+        <include refid="selectList"></include>
+        WHERE USER_REFRESH_TOKEN = #{userRefreshToken}
+        AND user_use=TRUE
+    </select>
 </mapper>

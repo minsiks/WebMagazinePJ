@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,7 +19,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.aza.config.auth.PrincipalDetails;
+import com.aza.dao.admin.user.UserMapper;
 import com.aza.domain.admin.user.User;
+import com.aza.dto.admin.user.UserDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -32,12 +35,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 	private final PasswordEncoder passwordEncoder;
 	private final AuthenticationManager authenticationManager;
+	private final ObjectMapper objectMapper = new ObjectMapper();
+	private final UserMapper userMapper;
 	
-	
-	public JwtAuthenticationFilter(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder) {
+	public JwtAuthenticationFilter(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder,UserMapper userMapper) {
 		this.passwordEncoder = passwordEncoder;
 		this.authenticationManager = authenticationManager;
-		setFilterProcessesUrl("/api/admin/signIn");
+		this.userMapper = userMapper;
+		setFilterProcessesUrl("/api/signIn");
 	}
 	// /login 요청을 하면 로그인 시도를 위해서 실행되는 함수
 	@Override
@@ -87,8 +92,24 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 				.withClaim("username", principalDetails.getUser().getUserId())
 				.sign(Algorithm.HMAC512(JwtProperties.SECRET)); // 내 서버만 아는 고유한 값
 		
-		response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX+jwtToken);
+		String refreshToken = JWT.create()
+				.withSubject("refreshToken") // 토큰 이름
+				.withExpiresAt(new Date(System.currentTimeMillis()+(JwtProperties.REFRESH_EXPIRATION_TIME))) // 토큰 만료시간
+				.sign(Algorithm.HMAC512(JwtProperties.SECRET)); // 내 서버만 아는 고유한 값
+		
+		User user = userMapper.getAdminUserById(principalDetails.getUser().getUserId());
+		UserDto dto = UserDto.create(user);
+		
+		userMapper.updateRefreshToken(dto.getUserId(), refreshToken);
+		
+		response.setStatus(HttpServletResponse.SC_OK);
+		response.setHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX+jwtToken);
+		response.setHeader("Refreshtoken", JwtProperties.TOKEN_PREFIX+refreshToken);
+		String result = objectMapper.writeValueAsString(dto);
+		log.debug("{}->!!!!!!!!!!!!"+result);
+		response.getWriter().write(result);
 		
 	}
+	
 	
 }

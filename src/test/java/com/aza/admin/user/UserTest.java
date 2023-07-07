@@ -46,9 +46,5 @@ public class UserTest {
 		User user = userService.findUser("admin01");
 		log.debug("::::::"+ user);
 	}
-	@Test
-	public void adminLogin() {
-		UserDto user = userService.adminLogin(new UserDto("admin079", "1234","김씨", "남", "010-1111-1111", new Date(), null));
-		log.debug("::::::dto"+ user);
-	}
+	
 }

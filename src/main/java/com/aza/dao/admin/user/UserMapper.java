@@ -16,4 +16,6 @@ public interface UserMapper {
 	public void insertAdminUser(User user);
 	public User getAdminUserById(String id);
 	public User getUserById(String id);
+	public void updateRefreshToken(@Param("userId")String userId, @Param("userRefreshToken")String userRefreshToken);
+	public User getUserByRefreshToken(String userRefreshToken);
 }
