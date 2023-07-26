@@ -44,4 +44,9 @@
         WHERE USER_REFRESH_TOKEN = #{userRefreshToken}
         AND user_use=TRUE
     </select>
+    <select id="getUserByPNo" resultType="User" parameterType="String">
+        <include refid="selectList"></include>
+        WHERE USER_PHONE_NO = #{userPhoneNo}
+        AND user_use=TRUE
+    </select>
 </mapper>

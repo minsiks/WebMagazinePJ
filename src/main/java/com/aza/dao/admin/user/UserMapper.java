@@ -18,4 +18,5 @@ public interface UserMapper {
 	public User getUserById(String id);
 	public void updateRefreshToken(@Param("userId")String userId, @Param("userRefreshToken")String userRefreshToken);
 	public User getUserByRefreshToken(String userRefreshToken);
+	public User getUserByPNo(String pNo);
 }
