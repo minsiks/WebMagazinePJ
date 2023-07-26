@@ -42,6 +42,7 @@ public class SecurityConfig { // extends WebSecurityConfigurerAdapter 22년 2월
 				.and()
 				.authorizeRequests()
 				.antMatchers("/api/admin/signUp").permitAll()
+				.antMatchers("/api/admin/findUserByPNo").permitAll()
 				.antMatchers("/api/auth/**").permitAll()
 				.antMatchers("/api/user/**")
 				.access("hasRole('1') or hasRole('2')")

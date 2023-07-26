@@ -49,5 +49,8 @@ public class UserService {
 			return "중복";
 		}
 	}
+	public User findUserByPNo(String pNo) {
+		return userMapper.getUserByPNo(pNo);
+	}
 
 }
