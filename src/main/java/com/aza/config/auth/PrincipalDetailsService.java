@@ -21,7 +21,6 @@ public class PrincipalDetailsService implements UserDetailsService{
 	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
 		System.out.println("PrincipalDetailsService의 loadUserByUsername()");
 		User userEntity = userMapper.getUserById(userId);
-		System.out.println("@@@@@@@@@@@@" + userEntity);
 		return new PrincipalDetails(userEntity);
 	}
 
