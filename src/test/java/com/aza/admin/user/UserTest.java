@@ -33,6 +33,7 @@ public class UserTest {
 		String regId =  userService.adminJoin(user);
 		
 		log.debug("::::::"+regId);
+		log.debug("::::::"+user);
 	}
 	@Test
 	public void getUserList() {
