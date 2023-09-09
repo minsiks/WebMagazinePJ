@@ -13,10 +13,16 @@ import com.aza.domain.admin.user.User;
 public interface UserMapper {
 
 	public List<User> getUserList();
+
 	public void insertAdminUser(User user);
+
 	public User getAdminUserById(String id);
+
 	public User getUserById(String id);
-	public void updateRefreshToken(@Param("userId")String userId, @Param("userRefreshToken")String userRefreshToken);
+
+	public void updateRefreshToken(@Param("userId") String userId, @Param("userRefreshToken") String userRefreshToken);
+
 	public User getUserByRefreshToken(String userRefreshToken);
+
 	public User getUserByPNo(String pNo);
 }
