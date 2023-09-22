@@ -34,6 +34,7 @@ public class UserTest {
 		
 		log.debug("::::::"+regId);
 		log.debug("::::::"+user);
+		
 	}
 	@Test
 	public void getUserList() {
